@@ -24,7 +24,18 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+cardList = document.querySelector(`.cards`);
+
+// const followersArray = [`insomniac34`, `tetondan`, `dustinmyers`, `justsml`, `luishrd`, `bigknell`];
+// followersArray.forEach(user => {
+//   axios.get(`https://api.github.com/users/${user}`)
+//     .then(response => {
+//       cardList.appendChild(cardCreator(response));
+//     })
+//     .catch(err => {
+//       console.log(err);
+//     });
+// });
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -54,20 +65,12 @@ const followersArray = [];
   bigknell
 */
 
-const githubResponse = axios.get(`https://api.github.com/users/keenanhallas`)
-  .then(response => {
-    return response;
-  })
-  .catch(err => {
-    return err;
-  });
-
 function cardCreator(response){
   const cardDiv = document.createElement(`div`);
   cardDiv.classList.add(`card`);
 
     const userImg = document.createElement(`img`);
-    // userImg.src = response.data.avatar_url;
+    userImg.src = response.data.avatar_url;
     cardDiv.appendChild(userImg);
 
     const cardInfoDiv = document.createElement(`div`);
@@ -76,42 +79,61 @@ function cardCreator(response){
 
       const nameHeading = document.createElement(`h3`);
       nameHeading.classList.add(`name`);
-      //nameHeading.textContent = response.data.name;
+      nameHeading.textContent = response.data.name;
       cardInfoDiv.appendChild(nameHeading);
 
       const username = document.createElement(`p`);
       username.classList.add(`username`);
-      //username.textContent = response.data.login;
+      username.textContent = response.data.login;
       cardInfoDiv.appendChild(username);
 
       const userLocation = document.createElement(`p`);
-      //userLocation.textContent = response.data.location;
+      userLocation.textContent = response.data.location;
       cardInfoDiv.appendChild(userLocation);
 
       const profile = document.createElement(`p`);
-      profile.textContent = `Profile:`;
+      profile.textContent = `Profile: `; //is there a way to have the anchor tag here instead of appended below?
       cardInfoDiv.appendChild(profile);
 
         const userUrl = document.createElement(`a`);
-        //userUrl.href = response.data.url;
-        //userUrl.textContent = response.data.url;
+        userUrl.href = response.data.url;
+        userUrl.textContent = response.data.url;
         profile.appendChild(userUrl);
 
       const followers = document.createElement(`p`);
-      //followers.textContent = `Followers: ${response.data.followers}`;
+      followers.textContent = `Followers: ${response.data.followers}`;
       cardInfoDiv.appendChild(followers);
 
       const following = document.createElement(`p`);
-      //following.textContent = `Following: ${response.data.following}`;
+      following.textContent = `Following: ${response.data.following}`;
       cardInfoDiv.appendChild(following);
 
       const bio = document.createElement(`p`);
-      //bio.textContent = `Bio: ${response.data.bio}`;
+      bio.textContent = `Bio: ${response.data.bio}`;
       cardInfoDiv.appendChild(bio);
 
   return cardDiv;
 }
 
-  console.log(githubResponse);
-  const myUserCard = cardCreator(githubResponse);
-  console.log(myUserCard);
+function addFollowing(followingLink){
+  axios.get(followingLink)
+    .then(response => {
+      console.log(response);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+};
+
+axios.get(`https://api.github.com/users/keenanhallas`)
+  .then(response => {
+    console.log(response);
+    cardList.appendChild(cardCreator(response)); //does it make sense to bind the card to a variable as well?
+    return response.data.following_url;
+  })
+  .then(followingLink => {
+    addFollowing(followingLink);
+  })
+  .catch(err => {
+    console.log(err);
+  });
