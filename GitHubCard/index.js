@@ -53,3 +53,65 @@ const followersArray = [];
   luishrd
   bigknell
 */
+
+const githubResponse = axios.get(`https://api.github.com/users/keenanhallas`)
+  .then(response => {
+    return response;
+  })
+  .catch(err => {
+    return err;
+  });
+
+function cardCreator(response){
+  const cardDiv = document.createElement(`div`);
+  cardDiv.classList.add(`card`);
+
+    const userImg = document.createElement(`img`);
+    // userImg.src = response.data.avatar_url;
+    cardDiv.appendChild(userImg);
+
+    const cardInfoDiv = document.createElement(`div`);
+    cardInfoDiv.classList.add(`card-info`);
+    cardDiv.appendChild(cardInfoDiv);
+
+      const nameHeading = document.createElement(`h3`);
+      nameHeading.classList.add(`name`);
+      //nameHeading.textContent = response.data.name;
+      cardInfoDiv.appendChild(nameHeading);
+
+      const username = document.createElement(`p`);
+      username.classList.add(`username`);
+      //username.textContent = response.data.login;
+      cardInfoDiv.appendChild(username);
+
+      const userLocation = document.createElement(`p`);
+      //userLocation.textContent = response.data.location;
+      cardInfoDiv.appendChild(userLocation);
+
+      const profile = document.createElement(`p`);
+      profile.textContent = `Profile:`;
+      cardInfoDiv.appendChild(profile);
+
+        const userUrl = document.createElement(`a`);
+        //userUrl.href = response.data.url;
+        //userUrl.textContent = response.data.url;
+        profile.appendChild(userUrl);
+
+      const followers = document.createElement(`p`);
+      //followers.textContent = `Followers: ${response.data.followers}`;
+      cardInfoDiv.appendChild(followers);
+
+      const following = document.createElement(`p`);
+      //following.textContent = `Following: ${response.data.following}`;
+      cardInfoDiv.appendChild(following);
+
+      const bio = document.createElement(`p`);
+      //bio.textContent = `Bio: ${response.data.bio}`;
+      cardInfoDiv.appendChild(bio);
+
+  return cardDiv;
+}
+
+  console.log(githubResponse);
+  const myUserCard = cardCreator(githubResponse);
+  console.log(myUserCard);
